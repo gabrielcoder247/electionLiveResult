@@ -38,7 +38,6 @@ class AgentDetail(models.Model):
     phone = models.CharField(max_length=255, blank=True, null=True)
     address = models.CharField(max_length=255, blank=True, null=True)
     user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True,null=True, related_name='user_booking')
-    polling_unit_id = models.ForeignKey('Polling_unit', on_delete=models.CASCADE, related_name='polling_unit')
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     
 
@@ -70,7 +69,7 @@ class Announced_lga_result(models.Model):
 
     lga_name = models.CharField(max_length=50,null=True)
     party_abbreviation = models.CharField(max_length=4,null=True)
-    party_score = models.IntegerField(11)
+    party_score = models.IntegerField()
     # entered_by_user = models.CharField(max_length=50,null=True)
     date_entered = models.DateField(auto_now_add=True,blank=True, null=True)
     user_ip_address = models.CharField(max_length=50,null=True)
@@ -96,7 +95,7 @@ class Announced_pu_result(models.Model):
   
     lga_name = models.CharField(max_length=50,null=True)
     party_abbreviation = models.CharField(max_length=4,null=True)
-    party_score = models.IntegerField(11)
+    party_score = models.IntegerField()
     # entered_by_user = models.CharField(max_length=50,null=True)
     date_entered = models.DateField(auto_now_add=True,blank=True, null=True)
     user_ip_address = models.CharField(max_length=50,null=True)
@@ -128,7 +127,7 @@ class Announced_ward_result(models.Model):
    
     ward_name = models.CharField(max_length=50,null=True)
     party_abbreviation = models.CharField(max_length=4,null=True)
-    party_score = models.IntegerField(11)
+    party_score = models.IntegerField()
     entered_by_user = models.ForeignKey('AgentDetail', on_delete=models.CASCADE, related_name='ward_result')
     date_entered = models.DateField(auto_now_add=True,blank=True, null=True)
     user_ip_address = models.CharField(max_length=50,null=True)
@@ -188,7 +187,7 @@ class Polling_unit(models.Model):
 
    
     polling_unit_name = models.CharField(max_length=50,null=True)
-    party_score = models.IntegerField(11)
+    party_score = models.IntegerField()
     polling_unit_description = models.TextField(max_length=255,null=True)
     date_entered = models.DateField(auto_now_add=True,blank=True, null=True)
     lat = models.CharField(max_length=255,null=True)
@@ -196,7 +195,7 @@ class Polling_unit(models.Model):
     entered_by_user = models.ForeignKey('AgentDetail', on_delete=models.CASCADE, related_name='polling_unit_agents')
     user_ip_address = models.CharField(max_length=50,null=True)
     ward_id = models.ForeignKey('Ward', on_delete=models.CASCADE, related_name='polling_units_wards')
-    lga_id = models.ForeignKey('Lga', on_delete=models.CASCADE, related_name='polling_units_lga')
+    party_id = models.ForeignKey('Party', on_delete=models.CASCADE, related_name='party')
 
     def __str__(self):
         return self.polling_unit_name
@@ -224,13 +223,13 @@ class Ward(models.Model):
 
     ward_name = models.CharField(max_length=50,null=True)
     polling_unit_name = models.CharField(max_length=50,null=True)
-    party_score = models.IntegerField(11)
+    party_score = models.IntegerField()
     ward_description = models.CharField(max_length=255,null=True)
     date_entered = models.DateField(auto_now_add=True,blank=True, null=True)
     # entered_by_user = models.CharField(max_length=50,null=True)
     user_ip_address = models.CharField(max_length=50,null=True)
     lga_id = models.ForeignKey('Lga', on_delete=models.CASCADE, related_name='ward_lga_id')
-    entered_by_user = models.ForeignKey('AgentDetail', on_delete=models.CASCADE, related_name='ward_agent_details')
+    # entered_by_user = models.ForeignKey('AgentDetail', on_delete=models.CASCADE, related_name='ward_agent_details')
 
    
     def __str__(self):
