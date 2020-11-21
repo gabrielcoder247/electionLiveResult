@@ -60,7 +60,7 @@ class PartyAdmin(admin.ModelAdmin):
 
 @admin.register(models.Polling_unit)
 class Polling_unitAdmin(admin.ModelAdmin):
-    list_display = ('id','polling_unit_name','party_score','polling_unit_description','date_entered','lat','lng','user_ip_address')
+    list_display = ('id','polling_unit_name','polling_unit_description','date_entered','lat','lng','user_ip_address')
 
 
 

@@ -20,11 +20,13 @@ from bincom.views import signup_view, index
 
 
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path(r'', index, name = 'index_page'),
     path(r'',include('bincom.urls')),
-    path('signup/', signup_view, name="signup")
+    path('signup/', signup_view, name="signup"),
+    re_path(r'^accounts/', include('registration.backends.simple.urls')),
        # path(r'^accounts/$', include('registration.backends.default.urls'))
     # path(r'^accounts/', include('registration.backends.default.urls')),
    

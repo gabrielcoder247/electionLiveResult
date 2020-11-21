@@ -2,7 +2,7 @@
 <header class="site-header">
   <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top opaque-navbar">
     <div class="container">
-      <a class="navbar-brand mr-4 brand" href="/"><i class="fa fa-map-marker-alt"></i>  House Hunt</a>
+      <a class="navbar-brand mr-4 brand" href="/"><i class="fa fa-map-marker-alt"></i> LiveResult</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -17,9 +17,20 @@
                {% if user.is_authenticated %}
                <a class="nav-item nav-link brand" href="/"><i class="fas fa-home"></i>  Home</a>
 
-              <li><a class="nav-item nav-link brand" href="{% url 'profile' user.id %}"><i class="fas fa-user"></i>  Profile</a></li>
+              <li><a class="nav-item nav-link brand" href=""><i class="fas fa-user"></i>  Profile</a></li>
               <a class="nav-item nav-link brand" href="/accounts/logout"><i class="fas fa-sign-out-alt"></i>  Sign out</a>
-              <a class="nav-item nav-link brand" href="/new/listing"><i class="fas fa-plus"></i>  Add Listing</a>
+              <!-- <a class="nav-item nav-link brand" href="/new/lga"><i class="fas fa-plus"></i>  Add Listing</a> -->
+
+              <div class="dropdown">
+                <button class="dropbtn"><i class="fas fa-sign-out-alt"></i> forms</button>
+                <div class="dropdown-content">
+                  <a href="/new/p_unit">Polling Unit</a>
+                  <a href="/new/lga">Local government</a>
+                  <a href="/new/ward">Ward</a>
+                  <a href="/new/state">State</a>
+                </div>
+              </div>
+              
 
                {% else %}
                <a class="nav-item nav-link brand" href="/"><i class="fas fa-home"></i> Home</a>

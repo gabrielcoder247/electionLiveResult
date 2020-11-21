@@ -1,0 +1,224 @@
+{% extends 'base.html' %}
+{% load static%}
+
+{% block content %}
+{{block.super}}
+    <title> {{ title }} </title>
+    <div class="container-fluid">
+
+
+    <div class="landing">
+
+        <div class="landing-page">
+            <div class="cover">
+            <div class="title">
+                    <h2>ELECTION LIVE RESULTS</h2>
+                    <p>KEEP AN EYE ON YOUR VOTES HERE</p>
+                </div>
+
+
+                <nav class="categories">
+                  <div class="nav nav-tabs nav-justified category" id="nav-tab" role="tablist">
+                    <a class="nav-item nav-link cat active" id="all-listings-tab" data-toggle="tab" href="#all-listings" role="tab" aria-controls="all-listings" aria-selected="true">Polling units</a>
+                    <a class="nav-item nav-link cat" id="apartments-tab" data-toggle="tab" href="#apartments" role="tab" aria-controls="apartments" aria-selected="false">Wards</a>
+                    <a class="nav-item nav-link cat" id="bungalows-tab" data-toggle="tab" href="#bungalows" role="tab" aria-controls="bungalows" aria-selected="false">Local Governments</a>
+                    <a class="nav-item nav-link cat" id="mansionattes-tab" data-toggle="tab" href="#mansionattes" role="tab" aria-controls="mansionattes" aria-selected="false">States</a>
+                  </div>
+                </nav>
+            </div>
+        </div>
+    </div>
+  
+    <div class="tab-content" id="nav-tabContent">
+        <div class="tab-pane fade show active" id="all-listings" role="tabpanel" aria-labelledby="all-listings">
+
+            <div class="container content">
+                <div class="row">
+                  
+                    {{total}}
+  
+
+                   <h4 class="property" style="color:blue"> <b> Polling Units </b></h4>
+                   {% if p_units %}
+                   <div class="container-fluid">
+                       <div class="row">
+                       {% for p_unit in p_units %}
+                       <div class="col-sm-2 col-md-1"></div>
+                                   <div class="col-sm-8 col-md-10">
+                                       <div class="card article">
+                                           <a href="#" target="_blank">
+               
+               
+                                               <!-- {% if list.featured_pic_path %} -->
+                                                   <img class="card-img-top" src="{{list.featured_pic_path.url}}" alt="Image of" style="height:220px">
+                                               <!-- {% else %} -->
+                                                   <img src="{% static "photos/myhouse.png" %}" alt="" class="card-img-top" style="height:220px">
+                                               <!-- {% endif %} -->
+                                           </a>
+                                           <div class="card-body">
+                                               <h4 class="card-title">{{p_unit.polling_unit_name}}</h4>
+                                               <hr>
+                                              
+                                               <p class="metadata">Located in  </p>
+                                               <p class="metadata">Priced at AED {{p_unit.polling_unit_description}}</p>
+                                               <p> <small class="text-muted">{{p_unit.party_id.party_name}} | {{p_unit.party_score}}</small></p>
+                                             
+
+                                               <hr>
+                                               <p class="metadata mb-0 mt-0"> <p> <small>Posted on {{p_unit.date_entered}}</small> <br> <i>  <small> <b>by  {{list.user.username}} </b></small> </i></p>
+                                        
+                                           </div>
+                                       </div>
+                                   </div>
+                                   <div class="col-sm-2 col-md-1"></div>
+                       {% endfor %}
+                       </div>
+                   </div>
+                   {% else %}
+                   Display me
+                   {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="apartments" role="tabpanel" aria-labelledby="apartments">
+
+            <div class="container content">
+               <div class="row">
+                   <h4 class="property" style="color:blue"> <b> Wards </b></h4>
+                   {% if wards %}
+                   <div class="container-fluid">
+                       <div class="row">
+                       {% for ward in wards %}
+                       <div class="col-sm-2 col-md-1"></div>
+                                   <div class="col-sm-8 col-md-10">
+                                       <div class="card article">
+                                           <a href="#" target="_blank">
+               
+               
+                                               <!-- {% if apartment.featured_pic_path %} -->
+                                                   <img class="card-img-top" src="{{apartment.featured_pic_path.url}}" alt="Image of" style="height:220px">
+                                               <!-- {% else %} -->
+                                                   <img src="{% static "photos/myhouse.png" %}" alt="" class="card-img-top" style="height:220px">
+                                               <!-- {% endif %} -->
+                                           </a>
+                                           <div class="card-body">
+                                               <h4 class="card-title">{{ward.ward_name}}</h4>
+                                               <hr>
+                                               <p class="metadata">Located in {{ward.polling_unit_name}}</p>
+                                               <p class="metadata">Priced at AED {{ward.party_score}}</p>
+                                               <p> <small class="text-muted">{{ward.ward_description}} </small></p>
+ 
+                                               <p class="metadata mt-3"> <small> Posted on {{ward.date_entered}}</small></p>
+                                           </div>
+                                       </div>
+                                   </div>
+                                   <div class="col-sm-2 col-md-1"></div>
+                       {% endfor %}
+                       </div>
+                   </div>
+                   {% else %}
+                   Display me
+                   {% endif %}
+
+                    
+               </div>
+          </div>
+        </div>
+        <div class="tab-pane fade" id="bungalows" role="tabpanel" aria-labelledby="bungalows">
+
+            <div class="container content">
+               <div class="row">
+                   <h4 class="property" style="color:blue"> <b> Local Governments </b></h4>
+                   {% if lgas %}
+                   <div class="container-fluid">
+                       <div class="row">
+                       {% for lga in lgas %}
+                       <div class="col-sm-2 col-md-1"></div>
+                                   <div class="col-sm-8 col-md-10">
+                                       <div class="card article">
+                                           <a href="#" target="_blank">
+               
+               
+                                               <!-- {% if bungalow.featured_pic_path %} -->
+                                                   <img class="card-img-top" src="{{bungalow.featured_pic_path.url}}" alt="Image of" style="height:220px">
+                                               <!-- {% else %} -->
+                                                   <img src="{% static "photos/myhouse.png" %}" alt="" class="card-img-top" style="height:220px">
+                                               <!-- {% endif %} -->
+                                           </a>
+                                           <div class="card-body">
+                                               <h4 class="card-title">{{lga.lga_name}}</h4>
+                                               <hr>
+                                               <p class="metadata">Located in {{lga.lga_description}}</p>
+                                               <p class="metadata">Priced at AED {{lga.ward_id.party_score}}</p>
+                                               <!-- <p> <small class="text-muted">{{bungalow.category}} | {{bungalow.bedrooms}}</small></p> -->
+
+                                               <p class="metadata mt-3"> <small> Posted on {{lga.date_entered}} </small></p>
+                                           </div>
+                                       </div>
+                                   </div>
+                                   <div class="col-sm-2 col-md-1"></div>
+                       {% endfor %}
+                       </div>
+                   </div>
+                   {% else %}
+                   Display me
+                   {% endif %}
+
+                     
+               </div>
+          </div>
+        </div>
+        <div class="tab-pane fade" id="mansionattes" role="tabpanel" aria-labelledby="mansionattes">
+
+            <div class="container content">
+               <div class="row">
+                   <h4 class="property" style="color:blue"> <b> States </b></h4>
+                   {% if states %}
+                   <div class="container-fluid">
+                       <div class="row">
+                       {% for state in states %}
+                       <div class="col-sm-2 col-md-1"></div>
+                                   <div class="col-sm-8 col-md-10">
+                                       <div class="card article">
+                                           <a href="#" target="_blank">
+               
+               
+                                               <!-- {% if mansionatte.featured_pic_path %} -->
+                                                   <img class="card-img-top" src="{{mansionatte.featured_pic_path.url}}" alt="Image of" style="height:220px">
+                                               <!-- {% else %} -->
+                                                   <img src="{% static "photos/myhouse.png" %}" alt="" class="card-img-top" style="height:220px">
+                                               <!-- {% endif %} -->
+                                           </a>
+                                           <div class="card-body">
+                                               <h4 class="card-title">{{state.state_id.lga_name}}</h4>
+                                               <hr>
+                                               <p class="metadata">number of votes {{state.state_id.lga_description}}</p>
+                                               <p class="metadata">posted by {{state.state_id.entered_by_user}}</p>
+                                               <p> <small class="text-muted">{{mansionatte.category}} | {{mansionatte.bedrooms}}</small></p>
+                                              
+                                               <p class="metadata mt-3"> <small> Posted on {{state.state_id.date_entered}}</small></p>
+                                           </div>
+                                       </div>
+                                   </div>
+                                   <div class="col-sm-2 col-md-1"></div>
+                       {% endfor %}
+                       </div>
+                   </div>
+                   {% else %}
+                   Display me
+                   {% endif %}
+
+                     
+               </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-footer">
+        <!-- <p class="container__terms d-flex justify-content-center ">By signin up, you agree to our <br> <strong>Terms & Privacy Policy.</strong></p> -->
+            <p class="container__terms d-flex justify-content-center "> <small>&copy; <i style="color:blue"> liveResult.com</i> 2020 <br> <strong>Terms & Privacy Policy. </small> </strong></p>
+      </div>
+
+</div>
+
+{% endblock %}

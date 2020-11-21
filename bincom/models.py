@@ -9,6 +9,12 @@ from django.dispatch import receiver
 from django.db import models
 from django.contrib.auth.models import User
 from datetime import datetime as dt
+from django.db.models import Sum
+from django.db.models import Count
+from django import template
+
+register = template.Library()
+
 
 
 
@@ -73,7 +79,7 @@ class Announced_lga_result(models.Model):
     # entered_by_user = models.CharField(max_length=50,null=True)
     date_entered = models.DateField(auto_now_add=True,blank=True, null=True)
     user_ip_address = models.CharField(max_length=50,null=True)
-    entered_by_user = models.ForeignKey('AgentDetail', on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
    
     # class meta:
     #     ordering = ['-date'] 
@@ -99,8 +105,8 @@ class Announced_pu_result(models.Model):
     # entered_by_user = models.CharField(max_length=50,null=True)
     date_entered = models.DateField(auto_now_add=True,blank=True, null=True)
     user_ip_address = models.CharField(max_length=50,null=True)
-    entered_by_user = models.ForeignKey('AgentDetail', on_delete=models.CASCADE)
-    polling_unit_id = models.ForeignKey('Polling_unit', on_delete=models.CASCADE, related_name='polling_unit_result')
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    polling_unit_id = models.ManyToManyField('Polling_unit')
 
     def __str__(self):
         return self.entered_by_user
@@ -113,7 +119,7 @@ class Announced_state_result(models.Model):
     party_abbreviation = models.CharField(max_length=4,null=True)
     party_score = models.IntegerField(11)
     # entered_by_user = models.CharField(max_length=50,null=True)
-    entered_by_user = models.ForeignKey('AgentDetail', on_delete=models.CASCADE, related_name='state_result')
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     date_entered = models.DateField(auto_now_add=True,blank=True, null=True)
     user_ip_address = models.CharField(max_length=50,null=True)
 
@@ -128,7 +134,7 @@ class Announced_ward_result(models.Model):
     ward_name = models.CharField(max_length=50,null=True)
     party_abbreviation = models.CharField(max_length=4,null=True)
     party_score = models.IntegerField()
-    entered_by_user = models.ForeignKey('AgentDetail', on_delete=models.CASCADE, related_name='ward_result')
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     date_entered = models.DateField(auto_now_add=True,blank=True, null=True)
     user_ip_address = models.CharField(max_length=50,null=True)
 
@@ -139,12 +145,48 @@ class Announced_ward_result(models.Model):
 
 class Lga(models.Model):
 
-    lga_name = models.CharField(max_length=50,null=True)
+    ANIOCHA_NORTH = "ANIOCHA NORTH"
+    ANIOCH_SOUTH = "ANIOCH SOUTH"
+    ETHIOPE_EAST = "ETHIOPE EAST"
+    ETHIOPE_WEST= "ETHIOPE WEST"
+    IKA_NORTH = "IKA NORTH"
+    IKA_SOUTH = "IKA SOUTH"
+    ISOKO_SOUTH = "ISOKO SOUTH"
+    OSHIMILI_NORTH = "OSHIMILI NORTH"
+    OSHIMILI_WEST = "OSHIMILI WEST"
+    PATANI = "PATANI"
+    SAPELE = "SAPELE"
+    UGHELLI = "UGHELLI"
+    UVWEI = "UVWEI"
+    BODMADI = "BODMADI"
+    WARRI_NORTH = "WARRI NORTH"
+    WARRI_SOUTH = "WARRI SOUTH"
+
+    LGA_CHOICES = [
+    (ANIOCHA_NORTH, "ANIOCHA NORTH"),
+    (ANIOCH_SOUTH, "ANIOCH SOUTH"),
+    (ETHIOPE_EAST, "ETHIOPE EAST"),
+    (ETHIOPE_WEST, "ETHIOPE WEST"),
+    (IKA_NORTH,  "IKA NORTH"),
+    (IKA_SOUTH,  "IKA SOUTH"),
+    (ISOKO_SOUTH,  "ISOKO SOUTH"),
+    (OSHIMILI_NORTH,  "OSHIMILI NORTH"),
+    (OSHIMILI_WEST, "OSHIMILI WEST"),
+    (PATANI , "PATANI"),
+    (SAPELE,  "SAPELE"),
+    (UGHELLI , "UGHELLI"),
+    ( UVWEI , "UVWEI"),
+    (BODMADI, "BODMADI"),
+    (WARRI_NORTH, "WARRI NORTH"),
+    (WARRI_SOUTH, "WARRI SOUTH")
+    ]
+
+    lga_name = models.CharField(max_length=50,choices=LGA_CHOICES, default=WARRI_NORTH)
     lga_description = models.TextField()
-    state_id = models.ForeignKey('State', on_delete=models.CASCADE)
-    entered_by_user = models.ForeignKey('AgentDetail', on_delete=models.CASCADE)
+    entered_by_user = models.ManyToManyField(AgentDetail)
     date_entered = models.DateField(auto_now_add=True,blank=True, null=True)
     user_ip_address = models.CharField(max_length=50,null=True)
+    ward_id = models.ManyToManyField('Ward')
 
 
     def __str__(self):
@@ -185,22 +227,84 @@ class Party(models.Model):
 
 class Polling_unit(models.Model):
 
+    SAPALE_WARD = "SAPALE WARD"
+    PRI_SCH_AGHARA = "PRIMARY SCHOOL AGHARA"
+    IGINI_PI_SCH = "IGINI PRIMARY SCHOOL"
+    ISHERE_PRI_SCH = "ISHERE PRIMARY SCHOOL"
+    CHURCH_EFFURUNI_OVWEI = "CHURCH IN EFFURUNI OVWEI "
+    SCH_ETHIOPE_WEST = "SCHOOL ETHIOPE WEST"
+    OKEGBE_QUARTERS = "OKEGBE QUARTERS"
+    EMAMI_QUARTERS = "EMAMI QUARTERS"
+    OBITEOGBON_QUARTERS = "OBITEOGBON QUARTERS"
+
+    PROPERTY_CHOICES = [
+    (SAPALE_WARD, "SAPALE WARD"),
+    (PRI_SCH_AGHARA, "PRIMARY SCHOOL AGHARA"),
+    ( ISHERE_PRI_SCH, "ISHERE PRIMARY SCHOOL"),
+    (CHURCH_EFFURUNI_OVWEI, "CHURCH IN EFFURUNI OVWEI "),
+    (SCH_ETHIOPE_WEST,  "SCHOOL ETHIOPE WEST"),
+    ( OKEGBE_QUARTERS, "OKEGBE QUARTERS"),
+    (EMAMI_QUARTERS, "EMAMI QUARTERS"),
+    (OBITEOGBON_QUARTERS, "OBITEOGBON QUARTERS"),
+    (IGINI_PI_SCH , "IGINI PRIMARY SCHOOL")
+    ]
+
    
-    polling_unit_name = models.CharField(max_length=50,null=True)
-    party_score = models.IntegerField()
-    polling_unit_description = models.TextField(max_length=255,null=True)
-    date_entered = models.DateField(auto_now_add=True,blank=True, null=True)
-    lat = models.CharField(max_length=255,null=True)
-    lng = models.CharField(max_length=255,null=True)
-    entered_by_user = models.ForeignKey('AgentDetail', on_delete=models.CASCADE, related_name='polling_unit_agents')
-    user_ip_address = models.CharField(max_length=50,null=True)
-    ward_id = models.ForeignKey('Ward', on_delete=models.CASCADE, related_name='polling_units_wards')
-    party_id = models.ForeignKey('Party', on_delete=models.CASCADE, related_name='party')
+    # polling_unit_name = models.CharField(max_length=50)
+    polling_unit_name = models.CharField(max_length=255, choices=PROPERTY_CHOICES, default=SAPALE_WARD)
+    pdp = models.IntegerField()
+    dpp = models.IntegerField()
+    acn = models.IntegerField()
+    jp = models.IntegerField()
+    ppa = models.IntegerField()
+    cdc = models.IntegerField()
+    anpp = models.IntegerField()
+    labour = models.IntegerField()
+    cpp = models.IntegerField()
+    # party_score = models.IntegerField()
+    polling_unit_description = models.TextField(max_length=255)
+    date_entered = models.DateField(auto_now_add=True,blank=True)
+    lat = models.CharField(max_length=255)
+    lng = models.CharField(max_length=255)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True)
+    # part_choices = models.CharField(max_length=255, choices=PROPERTY_CHOICES, default=PDP)
+    user_ip_address = models.CharField(max_length=50)
+
+
+    # @register.filter
+    # def vote_sum(self):
+
+    #     duplicates = Polling_unit.objects.values('polling_unit_name').annotate(name_count = Count('polling_unit_name')).filter(name_count__gt=1)
+
+    #     records = Polling_unit.objects.filter(polling_unit_name__in=[item['polling_unit_name'] for item in duplicates])
+    #     result = ([item.party_score for item in records])
+    #     total = sum(i for i in result)
+    #     return total
+        
+
+   
+
+    
+
+    def save_polling_unit(self):
+        self.save() 
+
+
+    # def vote_sum(self, id):
+
+    #     polling_unit = Polling_unit.objects.get(id=id)
+    #     filter_poll = polling_units.filter(polling_unit =  polling_unit)
+    #     vote_sum = filter_poll.aggregate(Sum('party_score'))
+    #     return  vote_sum
+        
+
+    @classmethod
+    def get_all(cls):
+        polling = cls.objects.all()
+        return polling
 
     def __str__(self):
-        return self.polling_unit_name
-
-        
+        return self.polling_unit_name    
 
    
    
@@ -210,6 +314,7 @@ class Polling_unit(models.Model):
 class State(models.Model):
 
     state_name = models.CharField(max_length=50,null=True)
+    state_id = models.ManyToManyField(Lga)
 
     def __str__(self):
         return self.state_name
@@ -228,8 +333,8 @@ class Ward(models.Model):
     date_entered = models.DateField(auto_now_add=True,blank=True, null=True)
     # entered_by_user = models.CharField(max_length=50,null=True)
     user_ip_address = models.CharField(max_length=50,null=True)
-    lga_id = models.ForeignKey('Lga', on_delete=models.CASCADE, related_name='ward_lga_id')
-    # entered_by_user = models.ForeignKey('AgentDetail', on_delete=models.CASCADE, related_name='ward_agent_details')
+    polling_unit_id = models.ManyToManyField(Polling_unit)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True,)
 
    
     def __str__(self):
