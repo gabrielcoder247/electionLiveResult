@@ -181,7 +181,7 @@ class Lga(models.Model):
     (WARRI_SOUTH, "WARRI SOUTH")
     ]
 
-    lga_name = models.CharField(max_length=50,choices=LGA_CHOICES, default=WARRI_NORTH)
+    lga_name = models.CharField(max_length=50)
     lga_description = models.TextField()
     entered_by_user = models.ManyToManyField(AgentDetail)
     date_entered = models.DateField(auto_now_add=True,blank=True, null=True)
@@ -189,8 +189,21 @@ class Lga(models.Model):
     ward_id = models.ManyToManyField('Ward')
 
 
+    @classmethod
+    def filter_by_lga(cls, lga_name ):
+        lga = cls.objects.filter(lga_name = lga_name )
+        return lga
+
+    @classmethod
+    def search_image(cls, search_term):
+        pictures = cls.objects.filter(name__icontains=search_term)
+        return pictures
+
+
     def __str__(self):
         return self.lga_name
+
+
 
 
 class Party(models.Model):
@@ -226,6 +239,43 @@ class Party(models.Model):
 
 
 class Polling_unit(models.Model):
+
+    ANIOCHA_NORTH = "ANIOCHA NORTH"
+    ANIOCH_SOUTH = "ANIOCH SOUTH"
+    ETHIOPE_EAST = "ETHIOPE EAST"
+    ETHIOPE_WEST= "ETHIOPE WEST"
+    IKA_NORTH = "IKA NORTH"
+    IKA_SOUTH = "IKA SOUTH"
+    ISOKO_SOUTH = "ISOKO SOUTH"
+    OSHIMILI_NORTH = "OSHIMILI NORTH"
+    OSHIMILI_WEST = "OSHIMILI WEST"
+    PATANI = "PATANI"
+    SAPELE = "SAPELE"
+    UGHELLI = "UGHELLI"
+    UVWEI = "UVWEI"
+    BODMADI = "BODMADI"
+    WARRI_NORTH = "WARRI NORTH"
+    WARRI_SOUTH = "WARRI SOUTH"
+
+    LGA_CHOICES = [
+    (ANIOCHA_NORTH, "ANIOCHA NORTH"),
+    (ANIOCH_SOUTH, "ANIOCH SOUTH"),
+    (ETHIOPE_EAST, "ETHIOPE EAST"),
+    (ETHIOPE_WEST, "ETHIOPE WEST"),
+    (IKA_NORTH,  "IKA NORTH"),
+    (IKA_SOUTH,  "IKA SOUTH"),
+    (ISOKO_SOUTH,  "ISOKO SOUTH"),
+    (OSHIMILI_NORTH,  "OSHIMILI NORTH"),
+    (OSHIMILI_WEST, "OSHIMILI WEST"),
+    (PATANI , "PATANI"),
+    (SAPELE,  "SAPELE"),
+    (UGHELLI , "UGHELLI"),
+    ( UVWEI , "UVWEI"),
+    (BODMADI, "BODMADI"),
+    (WARRI_NORTH, "WARRI NORTH"),
+    (WARRI_SOUTH, "WARRI SOUTH")
+    ]
+
 
     SAPALE_WARD = "SAPALE WARD"
     PRI_SCH_AGHARA = "PRIMARY SCHOOL AGHARA"
@@ -266,6 +316,7 @@ class Polling_unit(models.Model):
     date_entered = models.DateField(auto_now_add=True,blank=True)
     lat = models.CharField(max_length=255)
     lng = models.CharField(max_length=255)
+    lga_name = models.CharField(max_length=50,choices=LGA_CHOICES, default=WARRI_NORTH)
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True)
     # part_choices = models.CharField(max_length=255, choices=PROPERTY_CHOICES, default=PDP)
     user_ip_address = models.CharField(max_length=50)
@@ -280,23 +331,16 @@ class Polling_unit(models.Model):
     #     result = ([item.party_score for item in records])
     #     total = sum(i for i in result)
     #     return total
-        
-
-   
-
-    
 
     def save_polling_unit(self):
         self.save() 
 
+    
+    @classmethod
+    def filter_by_poll(cls, polling_unit_name ):
+        poll= cls.objects.filter(polling_unit_name= polling_unit_name )
+        return poll
 
-    # def vote_sum(self, id):
-
-    #     polling_unit = Polling_unit.objects.get(id=id)
-    #     filter_poll = polling_units.filter(polling_unit =  polling_unit)
-    #     vote_sum = filter_poll.aggregate(Sum('party_score'))
-    #     return  vote_sum
-        
 
     @classmethod
     def get_all(cls):
@@ -327,12 +371,12 @@ class State(models.Model):
 class Ward(models.Model):
 
     ward_name = models.CharField(max_length=50,null=True)
-    polling_unit_name = models.CharField(max_length=50,null=True)
-    party_score = models.IntegerField()
+    # polling_unit_name = models.CharField(max_length=50,null=True)
+    # party_score = models.IntegerField()
     ward_description = models.CharField(max_length=255,null=True)
     date_entered = models.DateField(auto_now_add=True,blank=True, null=True)
     # entered_by_user = models.CharField(max_length=50,null=True)
-    user_ip_address = models.CharField(max_length=50,null=True)
+    # user_ip_address = models.CharField(max_length=50,null=True)
     polling_unit_id = models.ManyToManyField(Polling_unit)
     user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True,)
 

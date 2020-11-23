@@ -29,6 +29,7 @@ ALLOWED_HOSTS = []
 
 
 LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
@@ -36,7 +37,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # Application definition
 
 INSTALLED_APPS = [
-    'registration',
+    # 'registration',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -47,6 +48,9 @@ INSTALLED_APPS = [
     'bootstrap4',
     'crispy_forms',
 ]
+
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 
 #Default one

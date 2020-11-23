@@ -26,13 +26,12 @@ def index(request):
   
     polling_units = Polling_unit.objects.all()
 
-    # duplicates = Polling_unit.objects.values('polling_unit_name').annotate(name_count = Count('polling_unit_name')).filter(name_count__gt=1)
+    polling_units_lga = polling_units.all()
+    print(polling_units_lga)
+    
 
-    # records = Polling_unit.objects.filter(polling_unit_name__in=[item['polling_unit_name'] for item in duplicates])
-    # result = ([item.party_score for item in records])
-    # total = sum(i for i in result)
 
-    # return  total
+
 
 
 
@@ -47,29 +46,33 @@ def index(request):
     lgas = Lga.objects.all()
     print(lgas)
 
+    # polling_unit_name = request.GET.get('polling_unit_name')
+    # new_lga = Polling_unit.objects.filter(polling_unit_name=polling_unit_name).all()
+    # print(new_lga)
+    new_poll = Polling_unit.objects.all()
 
-    # apartments = Listing.objects.filter(category__contains="apartments").all()
-    # print(apartments)
+    if request.GET.get('polling_unit_name'):
+        new_poll = Lga.filter_by_poll(request.GET.get('polling_unit_name'))
+        print(new_poll)
 
-    # mansionattes = Listing.objects.filter(category__contains="mansionattes").all()
-    # print(mansionattes)
+    else:
+        new_poll = Polling_unit.objects.all()
 
-    # bungalows = Listing.objects.filter(category__contains="bungalows").all()
-    # print(bungalows)
+    # LOCAL GOVERNEMENT QUERIES
+
+    new_lga = Lga.objects.all()
+
+    if request.GET.get('lga_name'):
+        new_lga = Lga.filter_by_lga(request.GET.get('lga_name'))
+        print(new_lga)
+
+    else:
+        new_lga = Lga.objects.all()
+
     
-
-    
-    return render(request, 'home.html', {"p_units": polling_units, "states": states, "wards": wards, "lgas": lgas})
+    return render(request, 'home.html', {"p_units": polling_units, "states": states, "wards": wards, "lgas": lgas, "polling_units_lga": polling_units_lga, "new_lga": new_lga,"new_poll": new_poll })
 
 
-# def total_vote(id):
-#        if id == self.id:
-#            vote_sum = Polling_unit.objects.aggregate(Sum('party_score'))
-#            return vote_sum 
-
-
-# def GetDoggysWithSameName(self):
-#     return Doggy.objects.filter(color=self.name)
 
 
 def signup_view(request):
@@ -126,6 +129,8 @@ def lga(request):
     '''
     View listing function that returns the listing page and data
     '''
+
+
     # form = ListingForm()
     current_user = request.user
     if request.method == 'POST':
@@ -192,6 +197,36 @@ def state(request):
         form = StateForm() 
 
     return render(request, 'state_form.html', {"form": form})
+
+
+def lga_filter(request,lga_name):
+    lgas = Lga.filter_by_lga(lga_name)
+    print(lgas)
+    title = 'local gov'
+    breadcrumb = "local gov"
+
+    context = {
+        "lgas":lgas ,
+        "title":title , 
+        "breadcrumb": breadcrumb,
+    }
+    return render(request,'lga_gov.html', context )
+
+
+
+def polls(request,polling_units_name):
+    poll = Polling_unit.filter_by_poll(polling_units_name)
+    print(poll)
+    title = 'local gov'
+    breadcrumb = "local gov"
+
+    context = {
+        "poll":poll ,
+        "title":title , 
+        "breadcrumb": breadcrumb,
+    }
+    return render(request,'lga_gov.html', context )
+
 
 
 

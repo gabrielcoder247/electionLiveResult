@@ -19,6 +19,10 @@ urlpatterns=[
     re_path(r'^new/lga$',views.lga,name='lga_form'),
     re_path(r'^signup/$', core_views.signup_view, name='signup'),
     re_path(r'^sign-out/$', logout, name='logout'),
+    re_path(r'^lga/(\w{2,})/$',views.lga_filter,name = 'lga'), 
+    re_path(r'^polls/(\w+)/$',views.polls,name = 'polls'),
+
+
     # url(r'^single_listing/(\d+)/$',views.single_listing,name='single_listing'),
     # url(r'^new/listing$',views.listing,name='listing_form'),
     # url(r'^signup/$', core_views.signup, name='signup'),

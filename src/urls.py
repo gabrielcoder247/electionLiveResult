@@ -26,7 +26,10 @@ urlpatterns = [
     path(r'', index, name = 'index_page'),
     path(r'',include('bincom.urls')),
     path('signup/', signup_view, name="signup"),
-    re_path(r'^accounts/', include('registration.backends.simple.urls')),
+    # path(r'^accounts/', include('registration.backends.simple.urls')),
+    path('accounts/', include('django_registration.backends.one_step.urls')),
+    path('accounts/', include('django.contrib.auth.urls')),
+    # path(r'^logout/$',logout, name = logout), 
        # path(r'^accounts/$', include('registration.backends.default.urls'))
     # path(r'^accounts/', include('registration.backends.default.urls')),
    
