@@ -123,7 +123,7 @@
                                        <div class="card article">
                                            <div class="card-body">
                                             <div class="row ml-1" >
-                                                <h4 class="card-title" style="color:blue; font-size: 26px"><i class="fas fa-map-marked-alt"></i> Polling Units</h4>
+                                                <h4 class="card-title" style="color:blue; font-size: 26px"><i class="fas fa-map-marked-alt"></i> Wards</h4>
                                                 <h4 class="card-title ml-auto mr-3" style="color:blue; font-size: 26px"><i class="fas fa-map-marked-alt"></i> Votes Results</h4>
                                                </div>
                                                <hr>
@@ -178,12 +178,27 @@
                                        <div class="card article">
                                            <div class="card-body">
                                             <div class="row ml-1" >
-                                                <h4 class="card-title" style="color:blue; font-size: 26px"><i class="fas fa-map-marked-alt"></i> Polling Units</h4>
+                                                <h4 class="card-title" style="color:blue; font-size: 26px"><i class="fas fa-map-marked-alt"></i> Local Gov.</h4>
                                                 <h4 class="card-title ml-auto mr-3" style="color:blue; font-size: 26px"><i class="fas fa-map-marked-alt"></i> Votes Results</h4>
                                                </div>
                                                <hr>
-                                               <p class="card-title" style="color:blue;font-size: 28px">{{lga.lga_name}}</p>
-                                               <p class="metadata">description of Local Gov. {{lga.lga_description}}</p>
+                                               <div class="row ml-1">
+                                                   <div>
+                                                    <p class="card-title" style="color:blue;font-size: 28px">{{lga.lga_name}}</p>
+                                                   </div>
+                                                   <div class="ml-auto mr-3">
+                                                    <p class="metadata" style="color:blue;font-size: 20px"> PDP {{total_pdp}}</p>
+                                                    <p class="metadata" style="color:blue;font-size: 20px"> DPP {{total_dpp}}</p>
+                                                    <p class="metadata" style="color:blue;font-size: 20px"> ACN {{total_acn}}</p>
+                                                    <p class="metadata" style="color:blue;font-size: 20px"> JP {{total_jp}}</p>
+                                                    <p class="metadata" style="color:blue;font-size: 20px"> CDC {{total_cdc}}</p>
+                                                    <p class="metadata" style="color:blue;font-size: 20px"> ANPP {{total_anpp}}</p>
+                                                    <p class="metadata" style="color:blue;font-size: 20px"> LABOUR {{total_labour}}</p>
+                                                    <p class="metadata" style="color:blue;font-size: 20px"> CPP {{total_cpp}}</p>
+
+                                                   </div>
+                                               </div>
+                                              
                                                <!-- <p class="metadata">Priced at AED {{lga.ward_id.party_score}}</p> -->
                                                <!-- <p> <small class="text-muted">{{bungalow.category}} | {{bungalow.bedrooms}}</small></p> -->
 
@@ -217,7 +232,7 @@
                                        <div class="card article">
                                            <div class="card-body">
                                             <div class="row ml-1" >
-                                                <h4 class="card-title" style="color:blue; font-size: 26px"><i class="fas fa-map-marked-alt"></i> Polling Units</h4>
+                                                <h4 class="card-title" style="color:blue; font-size: 26px"><i class="fas fa-map-marked-alt"></i> State </h4>
                                                 <h4 class="card-title ml-auto mr-3" style="color:blue; font-size: 26px"><i class="fas fa-map-marked-alt"></i> Votes Results</h4>
                                                </div>
                                                <hr>

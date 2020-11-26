@@ -377,8 +377,8 @@ class Ward(models.Model):
     date_entered = models.DateField(auto_now_add=True,blank=True, null=True)
     # entered_by_user = models.CharField(max_length=50,null=True)
     # user_ip_address = models.CharField(max_length=50,null=True)
-    polling_unit_id = models.ManyToManyField(Polling_unit)
-    user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True,)
+    polling_unit = models.ForeignKey(Polling_unit, on_delete=models.CASCADE, blank=True, null=True)
+    # user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True,)
 
    
     def __str__(self):

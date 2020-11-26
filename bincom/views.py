@@ -26,17 +26,36 @@ def index(request):
   
     polling_units = Polling_unit.objects.all()
 
+    '''
+    Here i use sql Group by in django annotes to filter out same polling unit and sum them
+    '''
+
+    duplicates = Polling_unit.objects.values('polling_unit_name').annotate(name_count = Count('polling_unit_name')).filter(name_count__gt=1)
+
+    records = Polling_unit.objects.filter(polling_unit_name__in=[item['polling_unit_name'] for item in duplicates])
+    pdp = ([item.pdp for item in records])
+    total_pdp = sum(i for i in pdp)
+    dpp = ([item.dpp for item in records])
+    total_dpp = sum(i for i in dpp)
+    acn = ([item.acn for item in records])
+    total_acn = sum(i for i in acn)
+    cdc = ([item.cdc for item in records])
+    total_cdc = sum(i for i in cdc)
+    anpp = ([item.anpp for item in records])
+    total_anpp = sum(i for i in anpp)
+    labour = ([item.labour for item in records])
+    total_labour = sum(i for i in labour)
+    cpp = ([item.cpp for item in records])
+    total_cpp = sum(i for i in cpp)
+    jp = ([item.jp for item in records])
+    total_jp = sum(i for i in jp)
+    result = ([item.polling_unit_name for item in records])
+   
+
+
     polling_units_lga = polling_units.all()
     print(polling_units_lga)
     
-
-
-
-
-
-
-
-
     states = State.objects.all()
     print(states)
 
@@ -58,7 +77,7 @@ def index(request):
     else:
         new_poll = Polling_unit.objects.all()
 
-    # LOCAL GOVERNEMENT QUERIES
+    # LOCAL GOVERNMENT QUERIES
 
     new_lga = Lga.objects.all()
 
@@ -70,7 +89,9 @@ def index(request):
         new_lga = Lga.objects.all()
 
     
-    return render(request, 'home.html', {"p_units": polling_units, "states": states, "wards": wards, "lgas": lgas, "polling_units_lga": polling_units_lga, "new_lga": new_lga,"new_poll": new_poll })
+    return render(request, 'home.html', {"p_units": polling_units, "states": states, "wards": wards, "lgas": lgas, 
+    "polling_units_lga": polling_units_lga, "new_lga": new_lga,"new_poll": new_poll,"total_pdp":total_pdp, "total_dpp":total_dpp ,
+    "total_acn":total_acn, "total_jp":total_jp, "total_cdc":total_cdc, "total_anpp":total_anpp, "total_labour":total_labour,"total_cpp":total_cpp, "records":records,"result":result })
 
 
 
