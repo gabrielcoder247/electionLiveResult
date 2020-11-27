@@ -236,8 +236,16 @@
                                                 <h4 class="card-title ml-auto mr-3" style="color:blue; font-size: 26px"><i class="fas fa-map-marked-alt"></i> Votes Results</h4>
                                                </div>
                                                <hr>
-                                               <p class="card-title" style="color:blue; font-size: 28px">{{state.state_name}}</p>
-                                               <p class="metadata" style="color:blue;">number of votes {{state.state_id.lga_description}}</p>
+                                               <div class="row ml-1">
+                                                   <div>
+                                                    <p class="card-title" style="color:blue; font-size: 28px">{{state.state_name}}</p>
+                                                   </div>
+                                                <div class="ml-auto mr-3">
+                                                    <p class="metadata ml-auto mr-3" style="color:blue;">number of votes {{state.state_id.lga_description}}</p>
+                                                </div>
+                                               
+                                               </div>
+                                               
                                                <!-- <p class="metadata">posted by {{state.state_id.entered_by_user}}</p>
                                                <p> <small class="text-muted">{{mansionatte.category}} | {{mansionatte.bedrooms}}</small></p> -->
                                               
